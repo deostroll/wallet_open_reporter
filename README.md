@@ -15,7 +15,7 @@ This way it takes a voice note of the transaction. You can do many such transact
 
 Once you reach home, wallet connects to home wi-fi, all the voice notes are uploaded to an app, which does a speech to text conversion of the voice note. Now each voice note is listed along with their corresponding open-times with the transcribed voice notes.
 
-![](./imgs/report.png)
+![](./imgs/report.PNG)
 
 ## What has been done
 
