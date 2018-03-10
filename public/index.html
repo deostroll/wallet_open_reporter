@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>Wallet Opening Report</title>
+
+    <script>
+        var timer = null;
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open('GET', "/getReportData", true);
+        xhr1.onreadystatechange = function() {
+            if (this.status == 200 && this.readyState == 4) {
+                var records = [];
+                try {
+                    records = JSON.parse(this.responseText);
+                } catch (e) {
+                    console.log(this.responseText);
+                    refresh();
+                    return;
+                };
+                var size = records.length;
+                document.getElementById('msg').innerHTML = '<B>Total Records: <font color="red">' + size + '</font></B>';
+                document.getElementById('lastupd').innerHTML = '<B>Last updated: <font color="green">' + new Date().toString().substring(0, 25) + '</font></B>';
+                var tbl = document.getElementById('rec');
+                var rows = "<colgroup><col><col><col><col></colgroup><tr><th>#</th><th>Date</th><th>Log</th><th>Delete</th><th>Text</th></tr>";
+                records.forEach(function(rec, i) {
+                    rows += '<tr><td>' + (size - i) + '</td><td>' + new Date(rec.date).toString().substring(0, 25) +
+                        '</td><td>' + '<audio controls onplaying=autorefresh(0);><source src="/wav/' + rec.wav + '" type="audio/wav">*</audio>' +
+                        '</td><td>' + '<input type="button" name="delete" value="delete" onClick=deleteWAV("' + rec.wav + '");>' +
+                        '</td><td>' + '<label name="Text" value="Text">' + rec.text + '</label>' + '</td></tr>';
+                });
+                tbl.innerHTML = rows;
+
+            }
+        };
+        xhr1.send();
+
+        //timer = setInterval(refresh, 5000);
+
+        function refresh() {
+            xhr1.open('GET', "/getReportData", true);
+            xhr1.send();
+            document.getElementById('lastupd').innerHTML = '<B>Last updated: <font color="green">' + new Date().toString().substring(0, 25) + '</font></B>';
+        };
+
+        function deleteWAV(wav) {
+            xhr1.open('GET', "/deleteWAV?wav=" + wav, true);
+            xhr1.send();
+        }
+
+        function autorefresh(enable) {
+            if (enable === 1) {
+                timer = setInterval(refresh, 5000);
+                document.getElementById('autoref').value = 'Click to Disable Autorefresh';
+                refresh();
+            } else if (enable === 0) {
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('autoref').value = 'Click to Enable Autorefresh';
+            } else {
+                if (timer == null) {
+                    timer = setInterval(refresh, 5000);
+                    document.getElementById('autoref').value = 'Click to Disable Autorefresh';
+                    refresh();
+                } else {
+                    clearInterval(timer);
+                    timer = null;
+                    document.getElementById('autoref').value = 'Click to Enable Autorefresh';
+                }
+            }
+
+        }
+    </script>
+
+</head>
+
+<body>
+    <H2>
+        <font color='blue'>Wallet Opening Report</font>
+    </H2>
+    <div id='msg' style="display: inline-block;height: 15px;">
+        <B>Total Records: <font color="red">&nbsp;&nbsp;&nbsp;&nbsp;</font></B>
+    </div>&nbsp;&nbsp;</div>&nbsp;&nbsp;|&nbsp;
+    <div id='lastupd' style="display: inline-block;">
+        <B>Last updated: </B>
+    </div>
+    <div id='ref' style="display: inline-block;">&nbsp;&nbsp;<input type="button" id="autoref" value="Click to Enable Autorefresh" onClick="autorefresh();"> </div>
+    <table id='rec' border='1' bordercolor="lightblue" cellpadding='5' cellspacing='0'></table>
+</body>
+
+</html>
