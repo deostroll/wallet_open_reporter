@@ -37,7 +37,7 @@ This is a base on which other IoT idea's can be merged to make your wallet a mig
 
 ## High-level schematic
 
-![high level schematic](./imgs/schematic_high_level.png)
+![high level schematic](./imgs/schematic_high_level.jpg)
 
 ## Getting started
 

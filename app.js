@@ -37,7 +37,7 @@ app.get('/getReportData', function(req, res) {
                 } catch (e) {
                     txt = ""
                 }
-                resp.push({ "date": new Date(Number(d[0]), Number(d[1]), Number(d[2]), Number(d[3]), Number(d[4]), Number(d[5])).getTime(), "wav": file, "text": txt ? txt : "" });
+                resp.push({ "date": new Date(Number(d[0]), Number(d[1] - 1), Number(d[2]), Number(d[3]), Number(d[4]), Number(d[5])).getTime(), "wav": file, "text": txt ? txt : "" });
             };
 
             //resp.reverse();
